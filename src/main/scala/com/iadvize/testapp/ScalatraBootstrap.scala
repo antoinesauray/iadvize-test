@@ -15,7 +15,6 @@ import slick.lifted.TableQuery
 class ScalatraBootstrap extends LifeCycle {
 
   implicit val swagger = new VDMSwagger
-  //val db: H2Profile.backend.Database = Database.forConfig("h2mem1")
   val db = Database.forURL("jdbc:sqlite:/Users/antoinesauray/Projects/Scala/test-backend-iadvize/vdm.db", driver = "org.sqlite.JDBC")
 
   override def init(context: ServletContext) {
