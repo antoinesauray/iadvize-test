@@ -56,8 +56,8 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
     * Retrieve a list of posts
     */
   get("/posts", operation(getPosts)) {
-    val q = for(c <- posts) yield c//new Post(c.id.asInstanceOf[Int], c.author.asInstanceOf[String], c.content.asInstanceOf[String], c.datetime.asInstanceOf[String])
-    Await.result(db.run(q.result), Duration("1s"))
+    val q = for(c <- posts) yield c
+    Await.result(db.run(q.result), Duration("5s"))
   }
 
   /**
