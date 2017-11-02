@@ -1,16 +1,21 @@
 package com.iadvize.testapp
 
-import com.iadvize.testapp.model.Post
+import com.iadvize.testapp.model.{Post, Posts}
 import org.json4s.JsonDSL._
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.json._
 import org.scalatra.swagger._
-import org.scalatra.{NotImplemented, Ok, ScalatraServlet}
+import org.scalatra.{BadRequest, NotImplemented, Ok, ScalatraServlet}
+import slick.jdbc.H2Profile.api._
+import slick.lifted.TableQuery
+
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 
 /**
   * Created by Antoine Sauray on 02/11/2017.
   */
-class VDMController extends ScalatraServlet with NativeJsonSupport with SwaggerSupport {
+class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServlet with NativeJsonSupport with SwaggerSupport {
 
   protected implicit val jsonFormats: Formats = DefaultFormats
 
@@ -48,18 +53,23 @@ class VDMController extends ScalatraServlet with NativeJsonSupport with SwaggerS
   }
 
   /**
-    * Retrieve a list of posts
+    * Retrieve a single post by id
     */
-  get("/posts", operation(getPosts)) {
-    NotImplemented()
+  get("/posts/:id", operation(getPost)) {
+    params.getAs[Int]("id") match {
+      case id => val q = for(c <- posts if c.id === id.get) yield c; Ok("post" -> Await.result(db.run(q.result), Duration("5s")))
+      case _ => BadRequest
+    }
   }
 
   /**
-    * Retrieve a single post by id
+    * Retrieve a list of posts
     */
-  get("/post/:id", operation(getPost)){
-    NotImplemented()
+  get("/posts", operation(getPosts)) {
+    val q = for(c <- posts) yield c; Ok("posts" -> Await.result(db.run(q.result), Duration("5s")))
   }
+
+
 
   override protected implicit def swagger: SwaggerEngine[_] = new VDMSwagger
 

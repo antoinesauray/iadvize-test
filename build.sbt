@@ -16,5 +16,8 @@ libraryDependencies ++= Seq(
   "org.scalatra"  %% "scalatra" % "2.5.3",
   "org.scalatra"  %% "scalatra-json" % "2.5.3",
   "org.scalatra"  %% "scalatra-swagger" % "2.5.3",
-  "org.json4s"    %% "json4s-native" % "3.5.0"
+  "org.json4s"    %% "json4s-native" % "3.5.0",
+  "com.typesafe.slick" %% "slick" % "3.2.0",
+  "org.slf4j" % "slf4j-nop" % "1.6.4",
+  "org.xerial" % "sqlite-jdbc" % "3.20.1"
 )

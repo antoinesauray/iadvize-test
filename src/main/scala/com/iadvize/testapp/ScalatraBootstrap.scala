@@ -1,17 +1,36 @@
 package com.iadvize.testapp
 
 /**
-  * Created by antoinesauray on 02/11/2017.
+  * Created by Antoine Sauray on 02/11/2017.
   */
-import org.scalatra._
+
 import javax.servlet.ServletContext
+
+import com.iadvize.testapp.model.Posts
+import org.scalatra._
+import slick.jdbc.H2Profile.api._
+import slick.lifted.TableQuery
+
 
 class ScalatraBootstrap extends LifeCycle {
 
   implicit val swagger = new VDMSwagger
+  //val db: H2Profile.backend.Database = Database.forConfig("h2mem1")
+  val db = Database.forURL("jdbc:sqlite:/Users/antoinesauray/Projects/Scala/test-backend-iadvize/vdm.db", driver = "org.sqlite.JDBC")
 
   override def init(context: ServletContext) {
-    context.mount(new VDMController, "/api", "api")
+    val posts = TableQuery[Posts]
+    val schema = posts.schema
+    db.run(DBIO.seq(
+      schema.create
+    ))
+
+    println("Starting server")
+    context.mount(new VDMController(db, posts), "/api", "api")
     context.mount (new ResourcesApp, "/swagger")
+  }
+
+  override def destroy(context: ServletContext): Unit = {
+    db.close()
   }
 }
