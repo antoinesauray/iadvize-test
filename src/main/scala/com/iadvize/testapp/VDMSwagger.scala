@@ -13,7 +13,7 @@ class ResourcesApp(implicit val swagger: Swagger) extends ScalatraServlet with N
 object IAdvizeApiInfo extends ApiInfo(
   "iAdvize Backend Test",
   "Docs for iAdvize backend test",
-  "http://localhost:8080/api-docs",
+  "http://localhost:8080/swagger",
   "antoine.sauray@etu.univ-nantes.fr",
   "Apache2",
   "https://www.apache.org/licenses/LICENSE-2.0")

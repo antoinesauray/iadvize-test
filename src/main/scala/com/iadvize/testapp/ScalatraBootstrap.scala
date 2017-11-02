@@ -12,6 +12,6 @@ class ScalatraBootstrap extends LifeCycle {
 
   override def init(context: ServletContext) {
     context.mount(new VDMController, "/api", "api")
-    context.mount (new ResourcesApp, "/api-docs")
+    context.mount (new ResourcesApp, "/swagger")
   }
 }
