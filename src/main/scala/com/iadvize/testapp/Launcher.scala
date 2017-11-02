@@ -7,11 +7,11 @@ import org.scalatra.servlet.ScalatraListener
 /**
   * Created by antoinesauray on 02/11/2017.
   */
-object Launcher { // this is my entry object as specified in sbt project definition
+object Launcher {
+
   def main(args: Array[String]) {
     val port = if(System.getenv("PORT") != null) System.getenv("PORT").toInt else 8080
     println("Listening on port " + port)
-
     val server = new Server(port)
     val context = new WebAppContext()
     context setContextPath "/"
