@@ -57,7 +57,7 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
     */
   get("/posts/:id", operation(getPost)) {
     params.getAs[Int]("id") match {
-      case id => val q = for(c <- posts if c.id === id.get) yield c; Await.result(db.run(q.result), Duration("5s"))
+      case id => val q = for(c <- posts if c.id === id.get) yield c; Ok("post" -> Await.result(db.run(q.result), Duration("5s")))
       case _ => BadRequest
     }
   }
@@ -66,8 +66,7 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
     * Retrieve a list of posts
     */
   get("/posts", operation(getPosts)) {
-    val q = for(c <- posts) yield c
-    Await.result(db.run(q.result), Duration("5s"))
+    val q = for(c <- posts) yield c; Ok("posts" -> Await.result(db.run(q.result), Duration("5s")))
   }
 
 
