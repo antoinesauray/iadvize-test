@@ -5,7 +5,7 @@ import org.json4s.JsonDSL._
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.json._
 import org.scalatra.swagger._
-import org.scalatra.{NotImplemented, Ok, ScalatraServlet}
+import org.scalatra.{BadRequest, NotImplemented, Ok, ScalatraServlet}
 import slick.jdbc.H2Profile.api._
 import slick.lifted.TableQuery
 
@@ -53,6 +53,16 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
   }
 
   /**
+    * Retrieve a single post by id
+    */
+  get("/posts/:id", operation(getPost)) {
+    params.getAs[Int]("id") match {
+      case id => val q = for(c <- posts if c.id === id.get) yield c; Await.result(db.run(q.result), Duration("5s"))
+      case _ => BadRequest
+    }
+  }
+
+  /**
     * Retrieve a list of posts
     */
   get("/posts", operation(getPosts)) {
@@ -60,18 +70,7 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
     Await.result(db.run(q.result), Duration("5s"))
   }
 
-  /**
-    * Retrieve a single post by id
-    */
-  get("/post/:id", operation(getPost)) {
-    /*
-    params.getAs[Int]("id") match {
-      case id:Option[Int] => for(c <- posts if c.id.asInstanceOf[Int] == id.get) yield new Post(c.id.asInstanceOf[Int], c.author.asInstanceOf[String], c.content.asInstanceOf[String], c.datetime.asInstanceOf[String])
-      case _ => pass()
-    }
-    */
-    NotImplemented
-  }
+
 
   override protected implicit def swagger: SwaggerEngine[_] = new VDMSwagger
 
