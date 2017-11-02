@@ -1,5 +1,7 @@
 package com.iadvize.testapp
 
+import java.text.SimpleDateFormat
+
 import com.iadvize.testapp.model.{Post, Posts}
 import org.json4s.JsonDSL._
 import org.json4s.{DefaultFormats, Formats}
@@ -11,6 +13,7 @@ import slick.lifted.TableQuery
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
+import scala.reflect.macros.ParseException
 
 /**
   * Created by Antoine Sauray on 02/11/2017.
@@ -66,7 +69,21 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
     * Retrieve a list of posts
     */
   get("/posts", operation(getPosts)) {
-    val q = for(c <- posts) yield c; Ok("posts" -> Await.result(db.run(q.result), Duration("5s")))
+    val fromStr = params.getAsOrElse[String]("from", null)
+    val toStr = params.getAsOrElse[String]("to", null)
+    val author = params.getAsOrElse[String]("author", null)
+    val dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss")
+    var conditions = List[Posts => Rep[Boolean]]()
+
+    params.getAs[String]("author") match {
+      case author: Option[String] => println("adding condition on author"); val f = (a: Posts) => a.author === author.get; conditions = List[Posts => Rep[Boolean]](f)
+    }
+
+    def validate(p: Posts, conditions: List[Posts => Rep[Boolean]]): Rep[Boolean]= {
+      if (conditions.tail.isEmpty) conditions.head(p)
+      else conditions.head(p) && validate(p, conditions.tail)
+    }
+    val q = for(p <- posts if validate(p, conditions)) yield p; Ok("posts" -> Await.result(db.run(q.result), Duration("5s")))
   }
 
 
