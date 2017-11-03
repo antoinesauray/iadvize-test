@@ -5,10 +5,10 @@ Hi there ! My name is Antoine and this is my technical test regarding my applica
 The test consists of parsing data from "Vie de merde" and making it available through a rest API.
 
 ## Programming languages
-I used Scala for the API. The main reason is because that is the language I would be at iAdvize. I also used Python to write a scrapper and parser file.
+I used **Scala** for the API. The main reason is because that is the language I would be at iAdvize. I also used **Python** to write a scrapper and parser file.
 
 ## Storage
-I used a PostGreSQL database for storing the data. At first I planned on using SQlite, but it turns out the support of Scala Slick for SQlite type is a bit chaotic (especially for date/time). I decided to switch to PGSQL because it is a common production RDMS. I did not use MongoDB because nowadays, it is not a viable option anymore (less efficient than PGSQL to treat JSON)
+I used a **PostGreSQL** database for storing the data. At first I planned on using SQlite, but it turns out the support of Scala Slick for SQlite type is a bit chaotic (especially for date/time). I decided to switch to PGSQL because it is a common production RDMS. I did not use MongoDB because nowadays, it is not a viable option anymore (less efficient than PGSQL to treat JSON)
 
 ## How to use
 ```bash 
