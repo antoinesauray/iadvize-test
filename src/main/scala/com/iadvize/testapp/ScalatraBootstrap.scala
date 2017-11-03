@@ -8,16 +8,18 @@ import javax.servlet.ServletContext
 
 import com.iadvize.testapp.model.Posts
 import org.scalatra._
-import slick.jdbc.H2Profile.api._
+import slick.jdbc.PostgresProfile
 import slick.lifted.TableQuery
+import slick.jdbc.PostgresProfile.api._
 
 
 class ScalatraBootstrap extends LifeCycle {
 
   implicit val swagger = new VDMSwagger
-  val db = Database.forURL("jdbc:sqlite:/Users/antoinesauray/Projects/Scala/test-backend-iadvize/vdm.db", driver = "org.sqlite.JDBC")
+  var db: PostgresProfile.backend.DatabaseDef = _
 
   override def init(context: ServletContext) {
+    db = Database.forURL("jdbc:postgresql://127.0.0.1:5432/vdm?user=vdm&password=vdm", driver = "org.postgresql.Driver")
     val posts = TableQuery[Posts]
     val schema = posts.schema
     db.run(DBIO.seq(

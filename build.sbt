@@ -19,9 +19,13 @@ libraryDependencies ++= Seq(
   "org.scalatra"  %% "scalatra-swagger" % "2.5.3",
   "org.json4s"    %% "json4s-native" % "3.5.0",
   "com.typesafe.slick" %% "slick" % "3.2.1",
-  //"org.slf4j" % "slf4j-nop" % "1.6.4",
-  "org.xerial" % "sqlite-jdbc" % "3.20.1",
+  "org.postgresql" % "postgresql" % "42.1.4",
+  "com.zaxxer" % "HikariCP" % "2.7.2",
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.3.0",
-  "joda-time" % "joda-time" % "2.7",
-  "org.joda" % "joda-convert" % "1.7"
+  "com.github.tminglei" % "slick-pg_2.12" % "0.15.4",
+  "com.github.tminglei" %% "slick-pg_joda-time" % "0.15.4",
+  "com.github.tminglei" %% "slick-pg_json4s" % "0.15.4",
+  "com.github.tminglei" %% "slick-pg_play-json" % "0.15.4",
+  "joda-time" % "joda-time" % "2.9.7",
+  "org.joda" % "joda-convert" % "1.8.1"
 )

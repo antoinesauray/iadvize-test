@@ -1,5 +1,9 @@
 package com.iadvize.testapp
 
+import java.sql.{Date, Timestamp}
+import java.text.SimpleDateFormat
+import java.util.Calendar
+
 import com.github.tototoshi.slick.SQLiteJodaSupport._
 import com.iadvize.testapp.model.{Post, Posts}
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter, ISODateTimeFormat}
@@ -10,8 +14,8 @@ import org.scalatra.json.NativeJsonSupport
 import org.scalatra.swagger._
 import org.scalatra.{BadRequest, Ok, ScalatraServlet}
 import play.api.libs.json._
-import slick.jdbc.H2Profile.api._
 import slick.lifted.TableQuery
+import slick.jdbc.PostgresProfile.api._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -92,8 +96,14 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
 
     // if from is defined, we add a condition to check the creation date
     if(from.isDefined) {
-      val date = simpleDateISOFormat.withZone(DateTimeZone.UTC).parseDateTime(from.get)
-      conditions = ((a: Posts) => a.createdAt >= date) :: conditions
+      val date = new Timestamp(new SimpleDateFormat("yyyy-MM-dd").parse(from.get).getTime)
+      conditions = ((a: Posts) => a.createdAt > date) :: conditions
+    }
+
+    // if to is defined, we add a condition to check the creation date
+    if(to.isDefined) {
+      val date = new Timestamp(new SimpleDateFormat("yyyy-MM-dd").parse(to.get).getTime)
+      conditions = ((a: Posts) => a.createdAt < date) :: conditions
     }
 
     // defining the validate function which will validate all the conditions
@@ -118,10 +128,10 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
 
     // This is the Json formatter that will be used
     implicit val fmt: Format[Post] = new Format[Post] {
-      def reads(js: JsValue): JsResult[Post] = JsSuccess(Post(0, "", "", DateTime.now()))
+      def reads(js: JsValue): JsResult[Post] = JsSuccess(Post(0, "", "", new Timestamp(1)))
       def writes(t: Post): JsValue = {
         val dateTimeFormat: DateTimeFormatter = ISODateTimeFormat.dateTime()
-        Json.obj("id" -> t.id, "author" -> t.author, "content" -> t.content, "created_at" -> t.created_at.toString(dateTimeFormat))
+        Json.obj("id" -> t.id, "author" -> t.author, "content" -> t.content, "created_at" -> t.created_at.toString())
       }
     }
     // deliver json with OK (200) http code
