@@ -54,9 +54,10 @@ def get_all_without_duplicates(count, insert_in_db=True):
     ret = list()
     if insert_in_db:
         try:
-            conn = psycopg2.connect("dbname='vdm' user='vdm' host='localhost' password='vdm'")
+            conn = psycopg2.connect("dbname='docker' user='docker' host='127.0.0.1' password='docker' port='5554'")
             c = conn.cursor()
         except:
+            print("Connection failed")
             exit(1)
     while i < count:
         soup = query(BASE_URL+'/?page='+str(page_number))

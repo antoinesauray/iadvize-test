@@ -28,7 +28,7 @@ class ScalatraBootstrap extends LifeCycle {
       val posts = TableQuery[Posts]
       val schema = posts.schema
       db.run(DBIO.seq(
-        schema.drop, // uncomment to drop the database
+        //schema.drop, // uncomment to drop the database
         schema.create
       ))
       println("Starting server")

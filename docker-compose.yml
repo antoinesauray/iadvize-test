@@ -1,0 +1,19 @@
+version: '2'
+services:
+  db:
+    restart: always
+    image: sameersbn/postgresql:9.6-2
+    ports:
+      - "5554:5432"
+    environment:
+      - DEBUG=false
+      - DB_USER=docker
+      - DB_PASS=docker
+      - DB_NAME=docker
+  backend:
+    #restart: always
+    image: default/test-backend-iadvize
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db

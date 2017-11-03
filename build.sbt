@@ -9,6 +9,7 @@ javaOptions ++= Seq(
   "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 )
 
+enablePlugins(DockerPlugin)
 
 libraryDependencies += "org.eclipse.jetty" % "jetty-webapp" % "9.4.7.v20170914"
 libraryDependencies += "com.typesafe.scala-logging" % "scala-logging-slf4j_2.11" % "2.1.2"
@@ -30,3 +31,15 @@ libraryDependencies += "org.postgresql" % "postgresql" % "42.1.4"
 libraryDependencies += "com.github.tminglei" % "slick-pg_2.12" % "0.15.4"
 libraryDependencies += "com.github.tminglei" %% "slick-pg_joda-time" % "0.15.4"
 libraryDependencies += "com.github.tminglei" %% "slick-pg_json4s" % "0.15.4"
+
+dockerfile in docker := {
+  // The assembly task generates a fat JAR file
+  val artifact: File = assembly.value
+  val artifactTargetPath = s"/app/${artifact.name}"
+
+  new Dockerfile {
+    from("openjdk:8")
+    add(artifact, artifactTargetPath)
+    entryPoint("java", "-jar", artifactTargetPath)
+  }
+}
