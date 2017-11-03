@@ -9,10 +9,12 @@ javaOptions ++= Seq(
   "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 )
 
+
 libraryDependencies += "org.eclipse.jetty" % "jetty-webapp" % "9.4.7.v20170914"
 libraryDependencies += "com.typesafe.scala-logging" % "scala-logging-slf4j_2.11" % "2.1.2"
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.0"
 libraryDependencies += "com.typesafe.slick" %% "slick" % "3.2.1"
+libraryDependencies += "com.typesafe.slick" %% "slick-hikaricp" % "3.2.1"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 libraryDependencies += "org.scalatra" %% "scalatra-specs2" % "2.5.3" % "test"

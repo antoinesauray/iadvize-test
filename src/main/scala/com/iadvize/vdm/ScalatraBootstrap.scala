@@ -19,17 +19,21 @@ class ScalatraBootstrap extends LifeCycle {
   var db: PostgresProfile.backend.DatabaseDef = _
 
   override def init(context: ServletContext) {
-    db = Database.forURL("jdbc:postgresql://127.0.0.1:5432/vdm?user=vdm&password=vdm", driver = "org.postgresql.Driver")
-    val posts = TableQuery[Posts]
-    val schema = posts.schema
-    db.run(DBIO.seq(
-      //schema.drop, // uncomment to drop the database
-      schema.create
-    ))
+    try{
+      db = Database.forConfig("database")
+      val posts = TableQuery[Posts]
+      val schema = posts.schema
+      db.run(DBIO.seq(
+        schema.drop, // uncomment to drop the database
+        schema.create
+      ))
 
-    println("Starting server")
-    context.mount(new VDMController(db, posts), "/api", "api")
-    context.mount (new ResourcesApp, "/swagger")
+      println("Starting server")
+      context.mount(new VDMController(db, posts), "/api", "api")
+      context.mount (new ResourcesApp, "/swagger")
+    } catch {
+      case e:Exception => e.printStackTrace()
+    }
   }
 
   override def destroy(context: ServletContext): Unit = {
