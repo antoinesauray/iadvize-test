@@ -15,11 +15,11 @@ trait GetPostTest extends ScalatraSuite with FunSuiteLike {
 
   test("get a single post") {
     get("/api/posts/1") {
-      val json = JSON.parseFull(body)
-      assert(json.isDefined)
-      val map = json.get.asInstanceOf[Map[String, Any]]
-      assert(map.get("post").isDefined)
       if(status == 200) {
+        val json = JSON.parseFull(body)
+        assert(json.isDefined)
+        val map = json.get.asInstanceOf[Map[String, Any]]
+        assert(map.get("post").isDefined)
         // we need to check the json
         val fields = map("post").asInstanceOf[Map[String,Any]]
         assert(fields.get("id").isDefined && fields("id").isInstanceOf[Number])

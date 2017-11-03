@@ -39,32 +39,32 @@ trait GetPostsTest extends ScalatraSuite with FunSuiteLike {
     }
 
     // call with from date
-    get("/api/posts?from=2017-10-05") {
+    get("/api/posts?from=2017-10-05T01:00:00") {
       status should equal (200)
     }
 
     // call with to date
-    get("/api/posts?to=2017-11-01") {
+    get("/api/posts?to=2017-11-01T01:00:00") {
       status should equal (200)
     }
 
     // call with author and from
-    get("/api/posts?author=Anonyme&from=2017-10-05") {
+    get("/api/posts?author=Anonyme&from=2017-10-05T01:00:00") {
       status should equal (200)
     }
 
     // call with author and to
-    get("/api/posts?author=Anonyme&to=2017-10-05") {
+    get("/api/posts?author=Anonyme&to=2017-10-05T01:00:00") {
       status should equal (200)
     }
 
     // call with from and to (from < to)
-    get("/api/posts?from=2017-10-05&to=2017-10-06") {
+    get("/api/posts?from=2017-10-05T01:00:00&to=2017-10-06T01:00:00") {
       status should equal (200)
     }
 
     // call with from and to (from > to)
-    get("/api/posts?from=2017-10-05&to=2017-10-01") {
+    get("/api/posts?from=2017-10-05T01:00:00&to=2017-10-01T01:00:00") {
       // return to the future: will return nothing but correct
       status should equal (200)
       val json = JSON.parseFull(body)
@@ -75,37 +75,36 @@ trait GetPostsTest extends ScalatraSuite with FunSuiteLike {
     }
 
     // call with a weird from
-    get("/api/posts?from=2017-1-05") {
+    get("/api/posts?from=2017-1-05T01:00:00") {
       // the parser does work in this case
       status should equal (200)
     }
 
-    // call with a wierd from (again but different)
-    get("/api/posts?from=2017-10-05-00") {
-      // the parser will stop before the end but it will work
-      status should equal (200)
+    // call with a wrong format
+    get("/api/posts?from=2017-10-05-00T01:00:00") {
+      status should equal (400)
     }
 
     // call with a weird to
-    get("/api/posts?to=2017-1-05") {
+    get("/api/posts?to=2017-1-05T01:00:00") {
       // the parser does work in this case
       status should equal (200)
     }
 
-    // call with a wierd to (again but different)
-    get("/api/posts?to=2017-10-05-00") {
+    // call with a wrong format
+    get("/api/posts?to=2017-10-05-00T01:00:00") {
       // the parser will stop before the end but it will work
-      status should equal (200)
+      status should equal (400)
     }
 
     // call with from and to, to being weird (from < to)
-    get("/api/posts?from=2017-1-05&to=2017-11-01") {
+    get("/api/posts?from=2017-1-05T01:00:00&to=2017-11-01T01:00:00") {
       // the parser understands that 1 is 01
       status should equal (200)
     }
 
     // call with author, from and to, (from being weird) and (from < to)
-    get("/api/posts?author=cendrillon&from=2017-1-05&to=2017-11-07") {
+    get("/api/posts?author=cendrillon&from=2017-1-05T01:00:00&to=2017-11-07T01:00:00") {
       // return to the future again (correct but will return nothing)
       status should equal (200)
       val json = JSON.parseFull(body)
@@ -116,7 +115,7 @@ trait GetPostsTest extends ScalatraSuite with FunSuiteLike {
     }
 
     // call with author, from and to (to being weird) and from < to
-    get("/api/posts?author=cendrillon&from=2016-11-01&to=2017-1-05") {
+    get("/api/posts?author=cendrillon&from=2016-11-01T01:00:00&to=2017-1-05T01:00:00") {
       // return to the future again (correct but will return nothing)
       status should equal (200)
     }
