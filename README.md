@@ -1,6 +1,5 @@
 # Backend test for iAdvize
-Hi there ! My name is Antoine and this is my technical test regarding my application at iAdvize
-https://www.iadvize.com/fr/
+Hi there ! My name is Antoine and this is my technical test regarding my application at [iAdvize](https://www.iadvize.com/fr/)
 
 ## Theme
 The test consists of parsing data from "Vie de merde" and making it available through a rest API.
@@ -15,7 +14,7 @@ I used a PostGreSQL database for storing the data. At first I planned on using S
 ```bash 
 docker-compose up
 ```
-The API will be exposed on your port 8081, and the database will be exposed on port 5554.
+The API will be exposed on your port **8081**, and the database will be exposed on port **5554**.
 Now the API is empty. To fill in data, execute the following script.
 ```bash 
 python3 parser/parse.py
