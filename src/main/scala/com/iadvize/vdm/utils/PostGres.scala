@@ -1,4 +1,4 @@
-package com.iadvize.testapp.utils
+package com.iadvize.vdm.utils
 
 /**
   * Created by Antoine Sauray on 03/11/2017.
@@ -13,7 +13,6 @@ trait MyPostgresProfile extends ExPostgresProfile
   with PgDate2Support
   with PgRangeSupport
   with PgHStoreSupport
-  with PgPlayJsonSupport
   with PgSearchSupport
   with PgNetSupport
   with PgLTreeSupport {
@@ -27,7 +26,6 @@ trait MyPostgresProfile extends ExPostgresProfile
 
   object MyAPI extends API with ArrayImplicits
     with DateTimeImplicits
-    with JsonImplicits
     with NetImplicits
     with LTreeImplicits
     with RangeImplicits

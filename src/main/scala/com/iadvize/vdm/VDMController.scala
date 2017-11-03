@@ -1,16 +1,14 @@
-package com.iadvize.testapp
+package com.iadvize.vdm
 
 import java.sql.Timestamp
-import java.text.SimpleDateFormat
+import java.text.{ParseException, ParsePosition, SimpleDateFormat}
 
-import com.iadvize.testapp.model.{Post, Posts}
-import org.joda.time.format.{DateTimeFormat, DateTimeFormatter, ISODateTimeFormat}
+import com.iadvize.vdm.model.{Post, Posts}
 import org.json4s.JsonDSL._
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.json.NativeJsonSupport
 import org.scalatra.swagger._
-import org.scalatra.{BadRequest, Ok, ScalatraServlet}
-import play.api.libs.json._
+import org.scalatra.{BadRequest, NotFound, Ok, ScalatraServlet}
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.TableQuery
 
@@ -67,8 +65,8 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
   get("/posts/:id", operation(getPost)) {
     val id = params.getAs[Int]("id")
     if(id.isDefined) {
-      val q = for(c <- posts if c.id === id.get) yield c; Ok("post" -> Await.result(db.run(q.result), Duration("5s")))
-    } else BadRequest
+      val q = for(c <- posts if c.id === id.get) yield c; val res = Await.result(db.run(q.result), Duration("5s")); if (res.nonEmpty) Ok("post" -> res.head) else NotFound("")
+    } else BadRequest()
   }
 
   /**
@@ -81,49 +79,54 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
     val to = params.getAs[String]("to")
     val author = params.getAs[String]("author")
 
-    // prepare date formatter
-    val simpleDateISOFormat = DateTimeFormat.forPattern("yyyy-MM-dd")
     // prepare list of conditions that will need to be satisfied in the SQL query
     var conditions = List[Posts => Rep[Boolean]]()
 
+    val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+    dateFormat.setLenient(false)
     // if author is defined, we add a condition to check the author
     if(author.isDefined) {
       conditions = ((a: Posts) => a.author === author.get) :: conditions
     }
 
-    // if from is defined, we add a condition to check the creation date
-    if(from.isDefined) {
-      val date = new Timestamp(new SimpleDateFormat("yyyy-MM-dd").parse(from.get).getTime)
-      conditions = ((a: Posts) => a.createdAt > date) :: conditions
+    try {
+      // if from is defined, we add a condition to check the creation date
+      if (from.isDefined) {
+        val date = new Timestamp(dateFormat.parse(from.get).getTime)
+        conditions = ((a: Posts) => a.createdAt > date) :: conditions
+      }
+
+      // if to is defined, we add a condition to check the creation date
+      if (to.isDefined) {
+        val date = new Timestamp(dateFormat.parse(to.get).getTime)
+        conditions = ((a: Posts) => a.createdAt < date) :: conditions
+      }
+
+      // defining the validate function which will validate all the conditions
+      def validate(p: Posts, conditions: List[Posts => Rep[Boolean]]): Rep[Boolean] = {
+        if (conditions.tail.isEmpty) conditions.head(p)
+        else conditions.head(p) && validate(p, conditions.tail)
+      }
+
+      // pre initialize the query variable
+      var q: slick.lifted.Query[Posts, Post, Seq] = null
+
+      // if there are no conditions we execute the query without checking
+      if (conditions.isEmpty) {
+        q = for (p <- posts) yield p
+      } else {
+        // otherwise we will validate them
+        q = for (p <- posts if validate(p, conditions)) yield p
+      }
+
+      // we get the results
+      val results = Await.result(db.run(q.result), Duration("5s"))
+      // deliver json with OK (200) http code
+      Ok("posts" -> results)
     }
-
-    // if to is defined, we add a condition to check the creation date
-    if(to.isDefined) {
-      val date = new Timestamp(new SimpleDateFormat("yyyy-MM-dd").parse(to.get).getTime)
-      conditions = ((a: Posts) => a.createdAt < date) :: conditions
+    catch {
+        case _:ParseException => BadRequest()
     }
-
-    // defining the validate function which will validate all the conditions
-    def validate(p: Posts, conditions: List[Posts => Rep[Boolean]]): Rep[Boolean]= {
-      if (conditions.tail.isEmpty) conditions.head(p)
-      else conditions.head(p) && validate(p, conditions.tail)
-    }
-
-    // pre initialize the query variable
-    var q: slick.lifted.Query[Posts, Post, Seq] = null
-
-    // if there are no conditions we execute the query without checking
-    if(conditions.isEmpty) {
-      q = for(p <- posts) yield p
-    } else {
-      // otherwise we will validate them
-      q = for(p <- posts if validate(p, conditions)) yield p
-    }
-
-    // we get the results
-    val results = Await.result(db.run(q.result), Duration("5s"))
-    // deliver json with OK (200) http code
-    Ok("posts" -> results)
   }
 
   override protected implicit def swagger: SwaggerEngine[_] = new VDMSwagger
