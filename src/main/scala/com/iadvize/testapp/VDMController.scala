@@ -1,21 +1,18 @@
 package com.iadvize.testapp
 
-import java.sql.{Date, Timestamp}
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.util.Calendar
 
-import com.github.tototoshi.slick.SQLiteJodaSupport._
 import com.iadvize.testapp.model.{Post, Posts}
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter, ISODateTimeFormat}
-import org.joda.time.{DateTime, DateTimeZone}
 import org.json4s.JsonDSL._
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.json.NativeJsonSupport
 import org.scalatra.swagger._
 import org.scalatra.{BadRequest, Ok, ScalatraServlet}
 import play.api.libs.json._
-import slick.lifted.TableQuery
 import slick.jdbc.PostgresProfile.api._
+import slick.lifted.TableQuery
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -125,17 +122,8 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
 
     // we get the results
     val results = Await.result(db.run(q.result), Duration("5s"))
-
-    // This is the Json formatter that will be used
-    implicit val fmt: Format[Post] = new Format[Post] {
-      def reads(js: JsValue): JsResult[Post] = JsSuccess(Post(0, "", "", new Timestamp(1)))
-      def writes(t: Post): JsValue = {
-        val dateTimeFormat: DateTimeFormatter = ISODateTimeFormat.dateTime()
-        Json.obj("id" -> t.id, "author" -> t.author, "content" -> t.content, "created_at" -> t.created_at.toString())
-      }
-    }
     // deliver json with OK (200) http code
-    Ok("posts" -> Json.toJson(results))
+    Ok("posts" -> results)
   }
 
   override protected implicit def swagger: SwaggerEngine[_] = new VDMSwagger
