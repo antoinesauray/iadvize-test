@@ -20,11 +20,12 @@ import slick.jdbc.PostgresProfile.api._
 class ScalatraBootstrap extends LifeCycle {
 
   implicit val swagger = new VDMSwagger
+
   var db: PostgresProfile.backend.DatabaseDef = _
 
   override def init(context: ServletContext) {
     try{
-      db = Database.forConfig("database")
+      db = Database.forConfig("docker")
       val posts = TableQuery[Posts]
       val schema = posts.schema
       db.run(DBIO.seq(
@@ -32,8 +33,8 @@ class ScalatraBootstrap extends LifeCycle {
         schema.create
       ))
       println("Starting server")
-      context.mount(new VDMController(db, posts), "/api", "api")
-      context.mount (new ResourcesApp, "/swagger")
+      context.mount(new VDMController(db, posts, swagger), "/api", "api")
+      context.mount (new ResourcesApp, "/swagger", "swagger")
     } catch {
       case e:Exception => e.printStackTrace()
     }
