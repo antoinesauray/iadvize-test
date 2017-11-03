@@ -4,13 +4,17 @@ import java.sql.Timestamp
 
 import com.iadvize.vdm.utils.MyPostgresProfile.api._
 
-
-case class Post(id: Int, author: String, content: String, created_at: Timestamp) {}
 /**
   * Created by Antoine Sauray on 02/11/2017.
   * content the content of the post
   * dateTime the date and time the post was created
   * author the author of the post
+  */
+case class Post(id: Int, author: String, content: String, created_at: Timestamp) {}
+
+/**
+  * Posts database
+  * @param tag
   */
 class Posts(tag: Tag) extends Table[Post](tag, "posts") {
 

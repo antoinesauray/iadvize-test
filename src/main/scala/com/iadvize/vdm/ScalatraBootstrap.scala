@@ -12,7 +12,11 @@ import slick.jdbc.PostgresProfile
 import slick.lifted.TableQuery
 import slick.jdbc.PostgresProfile.api._
 
-
+/**
+  * Created by Antoine Sauray on 02/11/2017.
+  * Lifecycle for the Servlet
+  * Used for initializing the database
+  */
 class ScalatraBootstrap extends LifeCycle {
 
   implicit val swagger = new VDMSwagger
@@ -27,7 +31,6 @@ class ScalatraBootstrap extends LifeCycle {
         schema.drop, // uncomment to drop the database
         schema.create
       ))
-
       println("Starting server")
       context.mount(new VDMController(db, posts), "/api", "api")
       context.mount (new ResourcesApp, "/swagger")

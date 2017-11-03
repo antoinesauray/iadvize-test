@@ -34,13 +34,18 @@ trait GetPostTest extends ScalatraSuite with FunSuiteLike {
       }
       // otherwise you need to fill the database
     }
+
+    // call with id being a string
     get("/api/posts/bla") {
       status should equal (400)
     }
+
+    // call with id being a string
     get("/api/posts/2a") {
       status should equal (400)
     }
 
+    // call with id being special characters
     get("/api/posts/é$aàè") {
       status should equal (400)
     }

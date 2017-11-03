@@ -17,13 +17,17 @@ import scala.concurrent.duration.Duration
 
 /**
   * Created by Antoine Sauray on 02/11/2017.
+  * Main controller for the app
   */
 class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServlet with NativeJsonSupport with SwaggerSupport {
 
   protected implicit val jsonFormats: Formats = DefaultFormats
 
+  /**
+    * Set json return format for each call
+    */
   before() {
-    // set the format to json for every route
+    // set the format to json for each call
     contentType = formats("json")
   }
 

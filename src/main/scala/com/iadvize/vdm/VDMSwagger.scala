@@ -5,6 +5,7 @@ import org.scalatra.swagger.{ApiInfo, NativeSwaggerBase, Swagger}
 
  /**
   * Created by Antoine Sauray on 02/11/2017.
+   * Swagger
   */
 class ResourcesApp(implicit val swagger: Swagger) extends ScalatraServlet with NativeSwaggerBase
 

@@ -6,7 +6,8 @@ import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.webapp.WebAppContext
 import org.scalatra.servlet.ScalatraListener
 /**
-  * Created by antoinesauray on 02/11/2017.
+  * Created by Antoine Sauray on 02/11/2017.
+  * App launcher
   */
 object Launcher {
 
@@ -21,10 +22,8 @@ object Launcher {
     context.addEventListener(new ScalatraListener)
     context.addServlet(classOf[DefaultServlet], "/")
     context.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false")
-
     server.setHandler(context)
     server.start()
     server.join()
-
   }
 }

@@ -2,6 +2,7 @@ package com.iadvize.vdm.utils
 
 /**
   * Created by Antoine Sauray on 03/11/2017.
+  * Used for PostGreSQL wrapper
   */
 import com.github.tminglei.slickpg._
 import play.api.libs.json.{JsValue, Json}
