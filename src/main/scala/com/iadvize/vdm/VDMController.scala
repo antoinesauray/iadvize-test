@@ -19,7 +19,7 @@ import scala.concurrent.duration.Duration
   * Created by Antoine Sauray on 02/11/2017.
   * Main controller for the app
   */
-class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServlet with NativeJsonSupport with SwaggerSupport {
+class VDMController(db: Database, posts: TableQuery[Posts], implicit val swagger: Swagger) extends ScalatraServlet with NativeJsonSupport with SwaggerSupport {
 
   protected implicit val jsonFormats: Formats = DefaultFormats
 
@@ -39,8 +39,8 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
       summary "Show all posts"
       notes "Shows all the posts available. You can search it too."
       parameters(
-      Parameter("from", DataType.Date, paramType = ParamType.Query, required = false),
-      Parameter("to", DataType.Date, paramType = ParamType.Query, required = false),
+      Parameter("from", DataType.DateTime, paramType = ParamType.Query, required = false),
+      Parameter("to", DataType.DateTime, paramType = ParamType.Query, required = false),
       Parameter("author", DataType.String, paramType = ParamType.Query, required = false)
     ))
 
@@ -132,8 +132,6 @@ class VDMController(db: Database, posts: TableQuery[Posts]) extends ScalatraServ
         case _:ParseException => BadRequest()
     }
   }
-
-  override protected implicit def swagger: SwaggerEngine[_] = new VDMSwagger
 
   override protected def applicationDescription: String = "The VDM API. It exposes operations for browsing VDM posts as well as retrieving a single one"
 }
