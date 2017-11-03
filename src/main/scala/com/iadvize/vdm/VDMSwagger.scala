@@ -1,4 +1,4 @@
-package com.iadvize.testapp
+package com.iadvize.vdm
 
 import org.scalatra.ScalatraServlet
 import org.scalatra.swagger.{ApiInfo, NativeSwaggerBase, Swagger}

@@ -1,8 +1,8 @@
-package com.iadvize.testapp.model
+package com.iadvize.vdm.model
 
 import java.sql.Timestamp
 
-import com.iadvize.testapp.utils.MyPostgresProfile.api._
+import com.iadvize.vdm.utils.MyPostgresProfile.api._
 
 
 case class Post(id: Int, author: String, content: String, created_at: Timestamp) {}

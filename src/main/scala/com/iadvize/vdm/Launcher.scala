@@ -1,4 +1,4 @@
-package com.iadvize.testapp
+package com.iadvize.vdm
 
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.DefaultServlet
@@ -16,7 +16,7 @@ object Launcher {
     val context = new WebAppContext()
     context setContextPath "/"
     context.setResourceBase("src/main/scala")
-    context.setInitParameter(ScalatraListener.LifeCycleKey, "com.iadvize.testapp.ScalatraBootstrap")
+    context.setInitParameter(ScalatraListener.LifeCycleKey, "com.iadvize.vdm.ScalatraBootstrap")
     context.addEventListener(new ScalatraListener)
     context.addServlet(classOf[DefaultServlet], "/")
     context.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false")

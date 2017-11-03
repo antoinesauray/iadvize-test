@@ -1,4 +1,4 @@
-package com.iadvize.testapp
+package com.iadvize.vdm
 
 /**
   * Created by Antoine Sauray on 02/11/2017.
@@ -6,7 +6,7 @@ package com.iadvize.testapp
 
 import javax.servlet.ServletContext
 
-import com.iadvize.testapp.model.Posts
+import com.iadvize.vdm.model.Posts
 import org.scalatra._
 import slick.jdbc.PostgresProfile
 import slick.lifted.TableQuery
