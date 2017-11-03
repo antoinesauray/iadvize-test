@@ -1,5 +1,6 @@
 package com.iadvize.vdm
 
+import com.typesafe.config.ConfigFactory
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.webapp.WebAppContext
