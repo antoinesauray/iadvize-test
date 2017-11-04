@@ -86,7 +86,7 @@ class VDMController(db: Database, posts: TableQuery[Posts], implicit val swagger
     // prepare list of conditions that will need to be satisfied in the SQL query
     var conditions = List[Posts => Rep[Boolean]]()
 
-    val dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss")
+    val dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
     dateFormat.setLenient(false)
     // if author is defined, we add a condition to check the author
     if(author.isDefined) {
