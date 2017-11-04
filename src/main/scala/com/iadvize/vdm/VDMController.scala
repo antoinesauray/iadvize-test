@@ -59,7 +59,7 @@ class VDMController(db: Database, posts: TableQuery[Posts], implicit val swagger
     */
   get("/") {
     Ok(
-      ("message" -> "this is the backend for iAdvize") ~ ("version" -> "1.0.4")
+      ("message" -> "this is the backend for iAdvize") ~ ("version" -> "1.0.0")
     )
   }
 
