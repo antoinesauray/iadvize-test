@@ -25,7 +25,7 @@ class ScalatraBootstrap extends LifeCycle {
 
   override def init(context: ServletContext) {
     try{
-      db = Database.forConfig("local")
+      db = Database.forConfig("docker")
       val posts = TableQuery[Posts]
       val schema = posts.schema
       db.run(DBIO.seq(
