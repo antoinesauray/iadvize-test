@@ -34,7 +34,7 @@ It is a bit long because VDM has a lot of doubles, sometimes triples. It makes s
 API Docker image => https://hub.docker.com/r/antoinesauray/backend-test-iadvize/
 
 ## Building the image yourself
-First you need to set the configuration. Modifiy the application.conf (src/main/resources/) files with the appropriate parameters.
+First you need to set the configuration. Modifiy the application.conf (src/main/resources/) files with the appropriate parameters. Then execute the following command.
 ```bash 
 sbt docker
 ```
