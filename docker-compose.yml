@@ -12,7 +12,7 @@ services:
       - DB_NAME=docker
   backend:
     #restart: always
-    image: antoinesauray/backend-test-iadvize:1.0.2
+    image: antoinesauray/backend-test-iadvize:1.0.3
     ports:
       - "8081:8080"
     depends_on:
