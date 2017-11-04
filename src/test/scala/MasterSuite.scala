@@ -16,7 +16,7 @@ class MasterSuite extends ScalatraSuite with BeforeAndAfterAll with GetIndex wit
   override def beforeAll(): Unit = {
     super.beforeAll()
     // setup the servlet for testing purpose
-    val db = Database.forURL("jdbc:postgresql://127.0.0.1:5432/vdm?user=vdm&password=vdm", driver = "org.postgresql.Driver")
+    val db = Database.forConfig("local")
     val vdmServlet = new VDMController(db, TableQuery[Posts], swagger)
     addServlet(vdmServlet, "/api", "api")
   }
