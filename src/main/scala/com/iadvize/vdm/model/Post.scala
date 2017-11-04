@@ -10,7 +10,7 @@ import com.iadvize.vdm.utils.MyPostgresProfile.api._
   * dateTime the date and time the post was created
   * author the author of the post
   */
-case class Post(id: Int, author: String, content: String, created_at: Timestamp) {}
+case class Post(id: Int, content: String, date: Timestamp, author: String) {}
 
 /**
   * Posts database
@@ -19,10 +19,10 @@ case class Post(id: Int, author: String, content: String, created_at: Timestamp)
 class Posts(tag: Tag) extends Table[Post](tag, "posts") {
 
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-  def author = column[String]("author")
   def content = column[String]("content")
-  def createdAt = column[Timestamp]("created_at")
+  def date = column[Timestamp]("date")
+  def author = column[String]("author")
 
-  def * = (id, author, content, createdAt) <> (Post.tupled, Post.unapply)
+  def * = (id, content, date, author) <> (Post.tupled, Post.unapply)
 
 }

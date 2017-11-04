@@ -1,7 +1,7 @@
 package com.iadvize.vdm
 
 import java.sql.Timestamp
-import java.text.{ParseException, ParsePosition, SimpleDateFormat}
+import java.text.{ParseException, SimpleDateFormat}
 
 import com.iadvize.vdm.model.{Post, Posts}
 import org.json4s.JsonDSL._
@@ -97,13 +97,13 @@ class VDMController(db: Database, posts: TableQuery[Posts], implicit val swagger
       // if from is defined, we add a condition to check the creation date
       if (from.isDefined) {
         val date = new Timestamp(dateFormat.parse(from.get).getTime)
-        conditions = ((a: Posts) => a.createdAt > date) :: conditions
+        conditions = ((a: Posts) => a.date > date) :: conditions
       }
 
       // if to is defined, we add a condition to check the creation date
       if (to.isDefined) {
         val date = new Timestamp(dateFormat.parse(to.get).getTime)
-        conditions = ((a: Posts) => a.createdAt < date) :: conditions
+        conditions = ((a: Posts) => a.date < date) :: conditions
       }
 
       // defining the validate function which will validate all the conditions
@@ -126,7 +126,7 @@ class VDMController(db: Database, posts: TableQuery[Posts], implicit val swagger
       // we get the results
       val results = Await.result(db.run(q.result), Duration("5s"))
       // deliver json with OK (200) http code
-      Ok("posts" -> results)
+      Ok(Map("posts" -> results, "count" -> results.size))
     }
     catch {
         case _:ParseException => BadRequest()

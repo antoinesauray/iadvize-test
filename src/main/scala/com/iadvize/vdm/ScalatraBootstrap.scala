@@ -25,11 +25,11 @@ class ScalatraBootstrap extends LifeCycle {
 
   override def init(context: ServletContext) {
     try{
-      db = Database.forConfig("docker")
+      db = Database.forConfig("local")
       val posts = TableQuery[Posts]
       val schema = posts.schema
       db.run(DBIO.seq(
-        //schema.drop, // uncomment to drop the database
+        schema.drop, // uncomment to drop the database
         schema.create
       ))
       println("Starting server")

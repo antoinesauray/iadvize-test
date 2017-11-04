@@ -24,9 +24,9 @@ trait GetPostsTest extends ScalatraSuite with FunSuiteLike {
         assert(fields.get("id").isDefined && fields("id").isInstanceOf[Number])
         assert(fields.get("author").isDefined && fields("author").isInstanceOf[String])
         assert(fields.get("content").isDefined && fields("content").isInstanceOf[String])
-        assert(fields.get("created_at").isDefined && fields("created_at").isInstanceOf[String])
+        assert(fields.get("date").isDefined && fields("date").isInstanceOf[String])
         try {
-          new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(fields("created_at").asInstanceOf[String])
+          new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(fields("date").asInstanceOf[String])
         } catch {
           case _: ParseException => fail()
         }

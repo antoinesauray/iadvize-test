@@ -92,7 +92,7 @@ def get_all_without_duplicates(count, insert_in_db=True):
                         if author != '' and content != '' and date != '':
                             ret.append(obj)
                             if insert_in_db:
-                                c.execute("INSERT INTO posts(author, content, created_at) VALUES (%(author)s, %(content)s, %(created_at)s)", {"author": author, "content": content, "created_at": date})
+                                c.execute("INSERT INTO posts(author, content, date) VALUES (%(author)s, %(content)s, %(date)s)", {"author": author, "content": content, "date": date})
                                 conn.commit()
                             i += 1
                             print(str(float(i)/float(count)*100) +"%")
