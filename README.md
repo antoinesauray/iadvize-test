@@ -3,6 +3,11 @@ Hi there ! My name is Antoine and this is my technical test regarding my applica
 
 [Demo](http://demo.sauray.com/api)
 
+## What's included ?
+* Docker compose for running both the docker image of the API and the RDMS
+* Tests
+* Swagger v1.2 specification on /swagger
+
 ## Theme
 The test consists of parsing data from "Vie de merde" and making it available through a rest API.
 
