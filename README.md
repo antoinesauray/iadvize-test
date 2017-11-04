@@ -26,7 +26,10 @@ Now the API is empty. To fill in data, execute the following script.
 ```bash 
 python3 parser/parse.py
 ```
-The script is a bit long because VDM has a lot of doubles, sometimes triples. It makes sure it does not insert twice the same content. The data will appear progressively in the API.
+The script has two dependencies.
+* bs4
+* psycopg2
+It is a bit long because VDM has a lot of doubles, sometimes triples. It makes sure it does not insert twice the same content. The data will appear progressively in the API.
 
 API Docker image => https://hub.docker.com/r/antoinesauray/backend-test-iadvize/
 
