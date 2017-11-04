@@ -21,4 +21,3 @@ class MasterSuite extends ScalatraSuite with BeforeAndAfterAll with GetIndex wit
     addServlet(vdmServlet, "/api", "api")
   }
 }
-

@@ -4,10 +4,6 @@ version := "1.0"
 
 scalaVersion := "2.12.4"
 
-javaOptions ++= Seq(
-  "-Xdebug",
-  "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
-)
 
 enablePlugins(DockerPlugin)
 
@@ -29,8 +25,11 @@ libraryDependencies += "org.json4s" %% "json4s-native" % "3.5.0"
 
 libraryDependencies += "org.postgresql" % "postgresql" % "42.1.4"
 libraryDependencies += "com.github.tminglei" % "slick-pg_2.12" % "0.15.4"
-libraryDependencies += "com.github.tminglei" %% "slick-pg_joda-time" % "0.15.4"
 libraryDependencies += "com.github.tminglei" %% "slick-pg_json4s" % "0.15.4"
+
+buildOptions in docker := BuildOptions(
+  cache = false
+)
 
 dockerfile in docker := {
   // The assembly task generates a fat JAR file
